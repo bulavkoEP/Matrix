@@ -41,7 +41,7 @@ int main(int argc, char * argv[]) {
     clock_t t_start = clock();
     //algo
     get_inverse(matrix, res, decomp, x, y);
-    cout << "TIME: " << (double) (clock() - t_start) << endl;
+    cout << "TIME: " << (double) (clock() - t_start) / CLOCKS_PER_SEC << endl;
 
     cout << "MATRIX: " << endl;
     print(matrix, m, cout);
