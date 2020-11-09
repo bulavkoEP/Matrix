@@ -17,6 +17,7 @@ int main(int argc, char * argv[]) {
         m = stoi(argv[2]);
         k = stoi(argv[3]);
         filename = argv[4];
+        cout << "SKDJF" << endl;
     } else if (argc == 4) {
         n = stoi(argv[1]);
         m = stoi(argv[2]);
@@ -30,9 +31,11 @@ int main(int argc, char * argv[]) {
     if (k != 0) {
         generate_matrix_from_formula(matrix, k);
     } else {
-        read_matrix_from_file(matrix, filename);
+        if (read_matrix_from_file(matrix, filename) != 1) {
+            delete matrix;
+            return 0;
+        }
     }
-    cout << endl << matrix->mat[5 * 2 + 2] << endl;
 
     Matrix* res = new Matrix(n, n);
     Matrix* decomp = new Matrix(n, n);
@@ -41,6 +44,14 @@ int main(int argc, char * argv[]) {
     clock_t t_start = clock();
     //algo
     get_inverse(matrix, res, decomp, x, y);
+
+    if (abs(res->get(0, 0) + 11) < 1e-15) {
+        cout << "det is zero" << endl;
+         delete matrix; delete decomp; delete res;
+         delete[] x; delete[] y;
+         return 0;
+    }
+
     cout << "TIME: " << (double) (clock() - t_start) / CLOCKS_PER_SEC << endl;
 
     cout << "MATRIX: " << endl;

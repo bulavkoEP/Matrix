@@ -1,8 +1,11 @@
 #include "Cholesky.h"
 
+#define EPS 1e-15
+
 void get_inverse(Matrix* mat, Matrix* res, Matrix* decomp, double* y, double* x) {
     get_cholesky_decomp(mat, decomp);
-    
+    double norm = mat->norm();
+
     for (int i = 0; i < mat->n; ++i) {
         for (int j = 0; j < mat->n; ++j) {
             x[j] = 0; y[j] = 0;
@@ -15,16 +18,12 @@ void get_inverse(Matrix* mat, Matrix* res, Matrix* decomp, double* y, double* x)
             }
             double b = 0;
             if (j == i) b = 1;
+            if (abs(norm) < 1e-18 || abs(decomp->get(j, j)) / norm < EPS) {
+                res->set(0, 0, -11);
+                return;
+            }
             y[j] = 1.0 / decomp->get(j, j) * (b - sum);
         }
-        /*
-        for (int j = mat->n - 1; j >= 0; --j) {
-            double sum = 0;
-            for (int k = j + 1; k < mat->n; ++k) {
-                sum += decomp->get(k, j) * x[k];
-            }
-            x[j] = 1.0 / decomp->get(j, j) * (y[j] - sum);
-        }*/
 
         for (int j = 0; j < mat->n; ++j) {
             double sum = 0;
