@@ -12,7 +12,10 @@ int read_matrix_from_file(Matrix* matrix, string filename) {
     
     for (int i = 0; i < matrix->n; ++i) {
         for (int j = 0; j < matrix->m; ++j) {
-            in >> tmp;
+            if (!(in >> tmp)) {
+                cout << "Error reading file" << endl;
+                return -1;
+            }
             matrix->set(i, j, tmp);
         }
     }
