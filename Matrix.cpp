@@ -34,9 +34,11 @@ Matrix* Matrix::mult_by(Matrix* b) {
         for (int j = 0; j < b->m; ++j) {
             double c = 0;
             for (int r = 0; r < m; ++r) {
-                c += get(i, r) * b->get(r, j);
+                c += mat[i * m + r] * b->mat[r * b->m + j];
+                //c += get(i, r) * b->get(r, j);
             }
-            res->set(i, j, c);
+            res->mat[i * res->m + j] = c;
+            //res->set(i, j, c);
         }
     }
     return res;
@@ -47,7 +49,8 @@ Matrix* Matrix::substract(Matrix* b) {
     Matrix* res = new Matrix(n, m);
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
-            res->set(i, j, get(i, j) - b->get(i, j));
+            //res->set(i, j, get(i, j) - b->get(i, j));
+            res->mat[i * res->m + j] = mat[i * m + j] - b->mat[i * b->m + j];
         }
     }
     return res;
@@ -58,7 +61,8 @@ double Matrix::norm() {
     for (int j = 0; j < m; ++j) {
         sum = 0;
         for (int i = 0; i < m; ++i) {
-            sum += abs(get(i, j));
+            sum += abs(mat[i * m + j]);
+            //sum += abs(get(i, j));
         }
         if (sum > max) max = sum;
     }

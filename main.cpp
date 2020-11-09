@@ -17,7 +17,6 @@ int main(int argc, char * argv[]) {
         m = stoi(argv[2]);
         k = stoi(argv[3]);
         filename = argv[4];
-        cout << "SKDJF" << endl;
     } else if (argc == 4) {
         n = stoi(argv[1]);
         m = stoi(argv[2]);
@@ -42,13 +41,13 @@ int main(int argc, char * argv[]) {
     double* x = new double[n];
     double* y = new double[n];
     clock_t t_start = clock();
-    //algo
-    get_inverse(matrix, res, decomp, x, y);
 
-    if (abs(res->get(0, 0) + 11) < 1e-15) {
+    int r = get_inverse(matrix, res, decomp, x, y);
+
+    if (r == -1) {
         cout << "det is zero" << endl;
          delete matrix; delete decomp; delete res;
-         delete[] x; delete[] y;
+         delete[] x; delete[] y;    
          return 0;
     }
 
