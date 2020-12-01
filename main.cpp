@@ -1,5 +1,5 @@
 #ifndef MATR
-#include "Matrix.h"
+#include "functions.h"
 #define MATR
 #endif
 #include "io.h"
@@ -26,52 +26,51 @@ int main(int argc, char * argv[]) {
         return 0;
     }
 
-    Matrix* matrix = new Matrix(n, n);
+    double* matrix = new double[n * (n + 1) / 2];
     if (k != 0) {
-        generate_matrix_from_formula(matrix, k);
+        generate_matrix_from_formula(matrix, n, k);
     } else {
-        if (read_matrix_from_file(matrix, filename) != 1) {
-            delete matrix;
+        if (read_matrix_from_file(matrix, n, filename) != 1) {
+            delete[] matrix;
             return 0;
         }
     }
 
-    Matrix* res = new Matrix(n, n);
-    Matrix* decomp = new Matrix(n, n);
-    double* x = new double[n];
-    double* y = new double[n];
+    cout << "MATRIX: " << endl;
+    print(matrix, n, m, cout);
+    cout << endl;
+
+    double* res = new double[n * (n + 1) / 2];
+    double* d = new double[n];
     clock_t t_start = clock();
 
-    int r = get_inverse(matrix, res, decomp, x, y);
+    int r = get_inverse(matrix, res, d, n);
 
     if (r == -1) {
         cout << "det is zero" << endl;
-         delete matrix; delete decomp; delete res;
-         delete[] x; delete[] y;    
+         delete[] matrix; delete[] res;
+         delete[] d; 
          return 0;
     }
 
     cout << "TIME: " << (double) (clock() - t_start) / CLOCKS_PER_SEC << endl;
 
-    cout << "MATRIX: " << endl;
-    print(matrix, m, cout);
-    cout << endl;
-    cout << "DECOMP: " << endl;
-    print(decomp, m, cout);
-    cout << endl;
-
+    cout << "A: " << endl;
+    print(matrix, n, m, cout);
     cout << "RES: " << endl;
-    print(res, m, cout);
+    print(res, n, m, cout);
     cout << endl;
 
-    Matrix* E = matrix->E(n);
-    Matrix* mult = matrix->mult_by(res);
-    Matrix* substracted = mult->substract(E);
-    cout << "MULT: " << endl;
-    print(mult, m, cout);
-    cout << endl;
-    cout << "NORM: " << substracted->norm() << endl;
+    if (k != 0) {
+        generate_matrix_from_formula(matrix, n, k);
+    } else {
+        if (read_matrix_from_file(matrix, n, filename) != 1) {
+            delete matrix;
+            return 0;
+        }
+    }
 
-    delete matrix; delete decomp; delete res; delete E;
-    delete substracted; delete[] x; delete[] y; delete mult;
+    cout << "NORM: " << mult_err(matrix, res, n) << endl;
+
+    delete[] matrix; delete[] res; delete[] d; 
 }
