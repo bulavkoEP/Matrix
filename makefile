@@ -4,14 +4,14 @@ LDFLAGS=-fsanitize=address
 
 all: prog
 
-prog: main.o io.o Matrix.o Cholesky.o
-	g++ main.cpp io.o Matrix.o Cholesky.o -o main $(LDFLAGS)
+prog: main.o io.o functions.o Cholesky.o
+	g++ main.cpp io.o functions.o Cholesky.o -o main $(LDFLAGS)
 
 io.o: io.cpp io.h
 	g++ -c $(CFLAGS) io.cpp
 
-Matrix.o: Matrix.cpp Matrix.h
-	g++ -c $(CFLAGS) Matrix.cpp
+functions.o: functions.cpp functions.h
+	g++ -c $(CFLAGS) functions.cpp
 
 Gauss.o: Cholesky.cpp Cholesky.h
 	g++ -c $(CFLAGS) Cholesky.cpp
